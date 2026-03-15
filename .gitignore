@@ -1,0 +1,7 @@
+.venv/
+*.wav
+__pycache__/
+*.pyc
+*.pid
+*.log
+CLAUDE.md
