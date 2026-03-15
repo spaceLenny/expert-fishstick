@@ -28,7 +28,7 @@ Dependencies: `sounddevice`, `numpy` (the installer handles these).
 
 ```sh
 git clone https://github.com/spaceLenny/expert-fishstick.git
-cd cogitron
+cd expert-fishstick
 ./install.sh
 source ~/.zshrc
 ```
@@ -121,6 +121,16 @@ Change those numbers (they must be ascending and ≤ 1.0) to shift the character
 
 - Attack/release times are in `Voice.render()` — search for `0.005` (5ms attack) and `0.02` (20ms release).
 - The tanh saturator coefficient (`0.9` in `audio_callback`) controls drive. Lower it for a cleaner, less compressed mix.
+
+---
+
+## Troubleshooting
+
+**No sound?** The most common cause is that sounds are disabled. Run `scifi-on` to enable them, then submit a new prompt.
+
+**`scifi-on` not found?** The aliases may not be loaded. Run `source ~/.zshrc` or check that `grep scifi ~/.zshrc` returns results. If nothing shows up, re-run `./install.sh`.
+
+**Sounds don't stop?** Run `scifi-off` to kill any running instance and clear the PID file.
 
 ---
 
