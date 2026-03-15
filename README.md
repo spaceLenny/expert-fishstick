@@ -1,5 +1,7 @@
 # COGITRON
 
+[![Demo](https://img.youtube.com/vi/JBsKOCadzTw/0.jpg)](https://youtu.be/JBsKOCadzTw)
+
 > *"The COGITRON is processing your request..."*
 
 COGITRON fills your terminal sessions with authentic 60s B-movie computer sounds — rapid beeps, chirps, and warbles that scale in intensity with your CPU load. Plug it into [Claude Code](https://claude.ai/claude-code) hooks and your AI assistant will sound like it's running on a room-sized mainframe.
