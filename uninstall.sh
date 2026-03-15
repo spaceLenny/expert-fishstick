@@ -28,18 +28,25 @@ settings_path = sys.argv[1]
 with open(settings_path) as f:
     settings = json.load(f)
 
+# Remove hooks from the correct nested location (settings.hooks.*)
+hooks_cfg = settings.get("hooks", {})
+
 # Remove start_sounds.sh hook from UserPromptSubmit
-for entry in settings.get("UserPromptSubmit", []):
+for entry in hooks_cfg.get("UserPromptSubmit", []):
     entry["hooks"] = [
         h for h in entry.get("hooks", [])
         if not h.get("command", "").endswith("start_sounds.sh")
     ]
 
 # Remove stop_sounds.sh hook from Stop
-settings["Stop"] = [
-    entry for entry in settings.get("Stop", [])
+hooks_cfg["Stop"] = [
+    entry for entry in hooks_cfg.get("Stop", [])
     if not any(h.get("command", "").endswith("stop_sounds.sh") for h in entry.get("hooks", []))
 ]
+
+# Also clean up old top-level keys from previous installs
+settings.pop("UserPromptSubmit", None)
+settings.pop("Stop", None)
 
 with open(settings_path, "w") as f:
     json.dump(settings, f, indent=2)

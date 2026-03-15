@@ -52,27 +52,28 @@ stop_hook = {
 with open(settings_path) as f:
     settings = json.load(f)
 
+# Hooks must be nested under a top-level "hooks" key
+hooks_cfg = settings.setdefault("hooks", {})
+
 # UserPromptSubmit — append start_hook if not already present
-ups = settings.setdefault("UserPromptSubmit", [])
-existing_matchers = [e.get("matcher") for e in ups]
-if ".*" not in existing_matchers:
-    ups.append({"matcher": ".*", "hooks": [start_hook]})
-else:
-    for entry in ups:
-        if entry.get("matcher") == ".*":
-            hooks = entry.setdefault("hooks", [])
-            if not any(h.get("command", "").endswith("start_sounds.sh") for h in hooks):
-                hooks.append(start_hook)
-            break
+ups = hooks_cfg.setdefault("UserPromptSubmit", [])
+if not any(
+    any(h.get("command", "").endswith("start_sounds.sh") for h in e.get("hooks", []))
+    for e in ups
+):
+    ups.append({"hooks": [start_hook]})
 
 # Stop — append stop_hook if not already present
-stop_entries = settings.setdefault("Stop", [])
-# Stop entries have no matcher field
+stop_entries = hooks_cfg.setdefault("Stop", [])
 if not any(
     any(h.get("command", "").endswith("stop_sounds.sh") for h in e.get("hooks", []))
     for e in stop_entries
 ):
     stop_entries.append({"hooks": [stop_hook]})
+
+# Clean up old top-level hook keys if they exist (from previous installs)
+settings.pop("UserPromptSubmit", None)
+settings.pop("Stop", None)
 
 with open(settings_path, "w") as f:
     json.dump(settings, f, indent=2)
